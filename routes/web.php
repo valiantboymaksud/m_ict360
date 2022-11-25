@@ -1,6 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Backend\HomeController;
+use App\Http\Controllers\HomeController as Frontend;
+use App\Http\Controllers\Backend\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +17,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+Route::get('/', [Frontend::class, 'index'])->name('index');
+
+
+Auth::routes();
+
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+
+Route::group(['middleware' => 'auth'], function(){
+    Route::resources([
+        'notifications'  => NotificationController::class,
+    ]);
 });
